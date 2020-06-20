@@ -1,2 +1,3 @@
-/chap01/chap01.iml
+*.iml
 /.idea/*
+*/target
