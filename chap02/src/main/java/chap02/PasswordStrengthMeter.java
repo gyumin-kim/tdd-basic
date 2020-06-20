@@ -2,12 +2,19 @@ package chap02;
 
 public class PasswordStrengthMeter {
 	public PasswordStrength meter(final String s) {
-		if (s.length() < 8) {
-			return PasswordStrength.NORMAL;
-		}
-		boolean containsNum = meetsContainingNumberCriteria(s);
-		if (!containsNum)	return PasswordStrength.NORMAL;
+		if (s == null || s.isEmpty())	return PasswordStrength.INVALID;
+		int metCounts = getMetCriteriaCounts(s);
+		if (metCounts <= 1)	return PasswordStrength.WEAK;
+		if (metCounts == 2)	return PasswordStrength.NORMAL;
 		return PasswordStrength.STRONG;
+	}
+
+	private int getMetCriteriaCounts(final String s) {
+		int metCounts = 0;
+		if (s.length() >= 8)	metCounts++;
+		if (meetsContainingNumberCriteria(s))	metCounts++;
+		if (meetsContainingUppercaseCriteria(s))	metCounts++;
+		return metCounts;
 	}
 
 	private boolean meetsContainingNumberCriteria(final String s) {
@@ -19,5 +26,16 @@ public class PasswordStrengthMeter {
 			}
 		}
 		return containsNum;
+	}
+
+	private boolean meetsContainingUppercaseCriteria(final String s) {
+		boolean containsUpp = false;
+		for (char ch : s.toCharArray()) {
+			if (Character.isUpperCase(ch)) {
+				containsUpp = true;
+				break;
+			}
+		}
+		return containsUpp;
 	}
 }
